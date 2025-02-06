@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, Slot } from "expo-router";
 import { useFonts } from "expo-font";
 import "./global.css";
 import { GlobalProvider } from "@/lib/useAppwrite";
@@ -13,11 +13,14 @@ export default function RootLayout() {
     "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
   });
 
+  if (!fontsLoaded) return null; // Ensure fonts are loaded before rendering
+
   return (
     <GlobalProvider>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="signin" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </GlobalProvider>
   );

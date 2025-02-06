@@ -15,12 +15,12 @@ import { login } from "../lib/appwrite";
 import { useGlobalContext } from "@/lib/useAppwrite";
 
 function Index() {
-  const router = useRouter(); // ✅ Get router instance
+  const router = useRouter();
   const { refetch, loading, isLoggedIn } = useGlobalContext();
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace("/signin"); // Change this to a valid route
+      router.replace("/signin");
     }
   }, [isLoggedIn]);
 

@@ -9,17 +9,6 @@ import {
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
 
-// Check if environment variables are loaded
-const projectId = Config.REACT_NATIVE_APPWRITE_PROJECT_ID;
-const platform = Config.REACT_NATIVE_APPWRITE_PROJECT_PLATFORM;
-const endpoint = Config.REACT_NATIVE_APPWRITE_PROJECT_ENDPOINT;
-
-export const config = {
-  projectId,
-  platform,
-  endpoint,
-};
-
 const client = new Client();
 
 // Initialize the client
@@ -35,7 +24,7 @@ try {
 export const avatar = new Avatars(client);
 export const account = new Account(client);
 
-export async function login() {
+export const login =  async () => {
   try {
     // Check if user is already logged in
     const existingUser = await getCurrentUser();
@@ -75,7 +64,7 @@ export async function login() {
   }
 }
 
-export async function getCurrentUser() {
+export const getCurrentUser =  async () => {
   try {
     const result = await account.get();
     if (result.$id) {
@@ -91,5 +80,15 @@ export async function getCurrentUser() {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+export const logout =  async () => {
+  try {
+    const result = await account.deleteSession("current");
+    return result;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 }
