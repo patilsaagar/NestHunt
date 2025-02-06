@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Image,
   SafeAreaView,
@@ -5,11 +6,28 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+// import { login } from "../lib/appwrite";
 
-export default function Index() {
+function Index() {
+  // const handleLogin = async () => {
+  //   // try {
+  //   //   const result = await login();
+  //   //   if (result) {
+  //   //     console.log("Login successful!");
+  //   //   }
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     Alert.alert(
+  //       "Login Failed",
+  //       "Failed to login with Google. Please try again."
+  //     );
+  //   }
+  // };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView contentContainerClassName="h-full">
@@ -23,7 +41,7 @@ export default function Index() {
             Welcome to your Nesthunt
           </Text>
           <Text className="text-black-400 text-center text-3xl font-rubik-bold">
-            Let's get start
+            Let's get started
           </Text>
           <TouchableOpacity className="bg-white shadow-md rounded-full p-6 m-6">
             <View className="flex flex-row items-center justify-center">
@@ -31,7 +49,7 @@ export default function Index() {
                 source={icons.google}
                 className="w-5 h-5"
                 resizeMethod="contain"
-              ></Image>
+              />
               <Text className="ml-2 text-lg text-black-300 font-rubik-medium">
                 Continue with Google
               </Text>
@@ -42,3 +60,5 @@ export default function Index() {
     </SafeAreaView>
   );
 }
+
+export default Index;
