@@ -14,8 +14,10 @@ const client = new Client();
 // Initialize the client
 try {
   client
+    .setPlatform('com.sandbox.nesthunt')
     .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject("67a438f20008358d3317");
+    .setProject("67a49e6c003acdea1355");
+    
 } catch (error) {
   console.error("Failed to initialize Appwrite client:", error);
   throw error;
@@ -24,7 +26,7 @@ try {
 export const avatar = new Avatars(client);
 export const account = new Account(client);
 
-export const login =  async () => {
+export const login = async () => {
   try {
     // Check if user is already logged in
     const existingUser = await getCurrentUser();
@@ -62,9 +64,9 @@ export const login =  async () => {
     console.error(error);
     return false;
   }
-}
+};
 
-export const getCurrentUser =  async () => {
+export const getCurrentUser = async () => {
   try {
     const result = await account.get();
     if (result.$id) {
@@ -81,9 +83,9 @@ export const getCurrentUser =  async () => {
     console.log(error);
     return null;
   }
-}
+};
 
-export const logout =  async () => {
+export const logout = async () => {
   try {
     const result = await account.deleteSession("current");
     return result;
@@ -91,4 +93,4 @@ export const logout =  async () => {
     console.error(error);
     return false;
   }
-}
+};
