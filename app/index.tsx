@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Image,
   SafeAreaView,
@@ -8,25 +8,36 @@ import {
   View,
   Alert,
 } from "react-native";
+import { useRouter } from "expo-router"; // ✅ Import router for navigation
 import images from "@/constants/images";
 import icons from "@/constants/icons";
-// import { login } from "../lib/appwrite";
+import { login } from "../lib/appwrite";
+import { useGlobalContext } from "@/lib/useAppwrite";
 
 function Index() {
-  // const handleLogin = async () => {
-  //   // try {
-  //   //   const result = await login();
-  //   //   if (result) {
-  //   //     console.log("Login successful!");
-  //   //   }
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     Alert.alert(
-  //       "Login Failed",
-  //       "Failed to login with Google. Please try again."
-  //     );
-  //   }
-  // };
+  const router = useRouter(); // ✅ Get router instance
+  const { refetch, loading, isLoggedIn } = useGlobalContext();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/signin"); // Change this to a valid route
+    }
+  }, [isLoggedIn]);
+
+  const handleLogin = async () => {
+    try {
+      const result = await login();
+      if (result) {
+        refetch();
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      Alert.alert(
+        "Login Failed",
+        "Failed to login with Google. Please try again."
+      );
+    }
+  };
 
   return (
     <SafeAreaView className="bg-white h-full">
@@ -43,7 +54,10 @@ function Index() {
           <Text className="text-black-400 text-center text-3xl font-rubik-bold">
             Let's get started
           </Text>
-          <TouchableOpacity className="bg-white shadow-md rounded-full p-6 m-6">
+          <TouchableOpacity
+            className="bg-white shadow-md rounded-full p-6 m-6"
+            onPress={handleLogin}
+          >
             <View className="flex flex-row items-center justify-center">
               <Image
                 source={icons.google}
