@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   Image,
@@ -5,14 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
 import icons from "@/constants/icons";
 import { useLocalSearchParams, usePathname } from "expo-router";
 
-const Search = () => {
+const Search = ({ onSearch }) => {
   const path = usePathname();
   const searchQuery = useLocalSearchParams<{ query?: string }>();
-  const [search, setSearch] = useState(searchQuery.query);
+  const [search, setSearch] = useState(searchQuery.query || "");
 
   return (
     <View className="flex flex-row justify-between items-center w-full px-4 rounded-lg bg-accent-100 border border-primary-100 mt-5 py-2">
@@ -21,15 +21,23 @@ const Search = () => {
         <TextInput
           className="text-sm font-rubik text-black-300 flex-1 ml-2"
           placeholder="Search for Something"
+          value={search}
+          onChangeText={(text) => {
+            console.log("Search input:", text);
+            setSearch(text);
+            onSearch(text); // 🔥 Auto-update search
+          }}
+          onClear={() => {
+            setSearch("");
+            onSearch(""); // 🔥 Reset to original data when cleared
+          }}
         />
       </View>
-      <TouchableOpacity>
-        <Image source={icons.filter} className="size-5"></Image>
+      <TouchableOpacity onPress={() => onSearch(search)}>
+        <Image source={icons.filter} className="size-5" />
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Search;
-
-const styles = StyleSheet.create({});

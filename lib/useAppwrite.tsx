@@ -14,7 +14,7 @@ interface User {
   avatar: string;
 }
 
-export function useAppwrite() {
+export function useAppwrite(p0: unknown) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

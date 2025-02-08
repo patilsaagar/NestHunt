@@ -5,19 +5,33 @@ import {
   ID,
   Avatars,
   OAuthProvider,
+  Databases,
+  Storage,
+  Query,
 } from "react-native-appwrite";
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
 
 const client = new Client();
+export const databases = new Databases(client);
+export const storage = new Storage(client);
 
-// Initialize the client
+export const config = {
+  platform: "com.sandbox.nesthunt",
+  endpoint: "https://cloud.appwrite.io/v1",
+  projectId: "67a321f40027f7bb0a2b",
+  databaseId: "67a59b5c003327de861d",
+  galleriesCollectionId: "67a59bec000e72d007a9",
+  reviewsCollectionId: "67a59c3f0011ea4f9eb0",
+  agentsCollectionId: "67a59b7900212a4b6681",
+  propertiesCollectionId: "67a59c8c003bec6a17b2",
+};
+
 try {
   client
-    .setPlatform('com.sandbox.nesthunt')
+    .setPlatform("com.sandbox.nesthunt")
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject("67a49e6c003acdea1355");
-    
 } catch (error) {
   console.error("Failed to initialize Appwrite client:", error);
   throw error;
@@ -94,3 +108,70 @@ export const logout = async () => {
     return false;
   }
 };
+
+export const getLatestProperties = async () => {
+  try {
+    const result = await databases.listDocuments(
+      "67a59b5c003327de861d",
+      "67a59c8c003bec6a17b2",
+      [Query.orderAsc("$createdAt"), Query.limit(5)]
+    );
+    return result.documents;
+  } catch (error) {
+    console.error("Error fetching latest properties:", error);
+    return [];
+  }
+};
+
+export async function getProperties({
+  filter,
+  query,
+  limit,
+}: {
+  filter: string;
+  query: string;
+  limit?: number;
+}) {
+  try {
+    const buildQuery = [Query.orderDesc("$createdAt")];
+
+    if (filter && filter !== "All")
+      buildQuery.push(Query.equal("type", filter));
+
+    if (query)
+      buildQuery.push(
+        Query.or([
+          Query.search("name", query),
+          Query.search("address", query),
+          Query.search("type", query),
+        ])
+      );
+
+    if (limit) buildQuery.push(Query.limit(limit));
+
+    const result = await databases.listDocuments(
+      "67a59b5c003327de861d",
+      "67a59c8c003bec6a17b2",
+      buildQuery
+    );
+
+    return result.documents;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getPropertyById({ id }: { id: string }) {
+  try {
+    const result = await databases.getDocument(
+      "67a59b5c003327de861d",
+      "67a59c8c003bec6a17b2",
+      id
+    );
+    return result;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
