@@ -18,7 +18,7 @@ export default function HomeScreen() {
   const { user } = useGlobalContext();
   const [latestProperties, setLatestProperties] = useState([]);
   const [recommendedProperties, setRecommendedProperties] = useState([]);
-  const [allProperties, setAllProperties] = useState([]); // ✅ Store the original list
+  const [allProperties, setAllProperties] = useState([]);
   const [search, setSearch] = useState("");
   const router = useRouter();
 

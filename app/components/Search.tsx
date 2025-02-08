@@ -25,11 +25,11 @@ const Search = ({ onSearch }) => {
           onChangeText={(text) => {
             console.log("Search input:", text);
             setSearch(text);
-            onSearch(text); // 🔥 Auto-update search
+            onSearch(text);
           }}
           onClear={() => {
             setSearch("");
-            onSearch(""); // 🔥 Reset to original data when cleared
+            onSearch("");
           }}
         />
       </View>
