@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Search from "../components/Search";
-import FeaturedCard, { Cards } from "../components/Cards";
+import FeaturedCard from "../components/FeaturedCard";
+import Cards from "../components/Cards";
 import Filters from "../components/Filters";
 import { useGlobalContext } from "@/lib/useAppwrite";
 import { getLatestProperties, getProperties } from "@/lib/appwrite";

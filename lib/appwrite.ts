@@ -12,10 +12,6 @@ import {
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
 
-const client = new Client();
-export const databases = new Databases(client);
-export const storage = new Storage(client);
-
 export const config = {
   platform: "com.sandbox.nesthunt",
   endpoint: "https://cloud.appwrite.io/v1",
@@ -27,11 +23,15 @@ export const config = {
   propertiesCollectionId: "67a59c8c003bec6a17b2",
 };
 
+const client = new Client();
+export const databases = new Databases(client);
+export const storage = new Storage(client);
+
 try {
   client
-    .setPlatform("com.sandbox.nesthunt")
-    .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject("67a49e6c003acdea1355");
+    .setEndpoint("https://cloud.appwrite.io/v1"!)
+    .setProject("67a49e6c003acdea1355"!)
+    .setPlatform("com.sandbox.nesthunt"!);
 } catch (error) {
   console.error("Failed to initialize Appwrite client:", error);
   throw error;
@@ -40,16 +40,9 @@ try {
 export const avatar = new Avatars(client);
 export const account = new Account(client);
 
-export const login = async () => {
+export async function login() {
   try {
-    // Check if user is already logged in
-    const existingUser = await getCurrentUser();
-    if (existingUser) {
-      console.log("User is already logged in:", existingUser);
-      return true; // No need to log in again
-    }
-
-    const redirectUri = Linking.createURL("/");
+    const redirectUri = Linking.createURL("/entry");
 
     const response = await account.createOAuth2Token(
       OAuthProvider.Google,
@@ -69,7 +62,6 @@ export const login = async () => {
     const userId = url.searchParams.get("userId")?.toString();
     if (!secret || !userId) throw new Error("Create OAuth2 token failed");
 
-    // Create a new session only if no session exists
     const session = await account.createSession(userId, secret);
     if (!session) throw new Error("Failed to create session");
 
@@ -78,9 +70,9 @@ export const login = async () => {
     console.error(error);
     return false;
   }
-};
+}
 
-export const getCurrentUser = async () => {
+export async function getCurrentUser() {
   try {
     const result = await account.get();
     if (result.$id) {
@@ -97,7 +89,7 @@ export const getCurrentUser = async () => {
     console.log(error);
     return null;
   }
-};
+}
 
 export const logout = async () => {
   try {
